@@ -2,63 +2,68 @@
 #include <WiFiClientSecure.h>
 #include "requestHandler.h"
 
-bool makeRequest(String url, String path, String body, String requesType, int port)
+WiFiClientSecure requestClient;
+bool makeRequest(String url, String path, String body, String requesType, int port, const char *fingerprint)
 {
-  WiFiClientSecure client;
-  if (!client.connect(url, port))
+  requestClient.setFingerprint(fingerprint);
+  requestClient.setTimeout(500);
+  Serial.println("Connecting to " + url + ":" + port);
+  if (!requestClient.connect(url, port))
   {
-    Serial.println("Login connection failed.");
+    Serial.println("Connection on request failed.");
     return false;
   }
 
-  client.print(String(requesType + " ") + path + " HTTP/1.1\r\n" +
-               "Host: " + url + "\r\n" +
-               "Content-Type: application/json" +
-               "Connection: close\n" +
-               "Content-Length: " + body.length() +
-               "\n\n" +
-               body + "\n");
+  Serial.println("Sending " + requesType);
+  requestClient.print(String(requesType + " ") + path + " HTTP/1.1\r\n" +
+                      "Host: " + url + "\r\n" +
+                      "Content-Type: application/json" +
+                      "Connection: close\n" +
+                      "Content-Length: " + body.length() +
+                      "\n\n" +
+                      body + "\n");
   // "\r\n\r\n"
   Serial.println("request sent");
 
   return true;
 }
 
-Request postRequest(String url, String path, String body)
+Request postRequest(String url, String path, String body, const char *fingerprint)
 {
-  WiFiClientSecure client;
-  bool result = makeRequest(url, path, body, "POST", 443);
+  bool result = makeRequest(url, path, body, "POST", 443, fingerprint);
   if (!result)
   {
-    return {400, "Bad Request"};
+    Serial.println("Request post failed.");
+    Request error = {400, "Bad Request"};
+    return error;
   }
   String responseBody = readBody();
-  Request request = {0, responseBody};
+  Request request = {200, responseBody};
   return request;
 }
 
-Request getRequest(String url, String path, String body)
+Request getRequest(String url, String path, String body, const char *fingerprint)
 {
-  WiFiClientSecure client;
-  bool result = makeRequest(url, path, body, "GET", 443);
+  bool result = makeRequest(url, path, body, "GET", 443, fingerprint);
   if (!result)
   {
-    return {400, "Bad Request"};
+    Serial.println("Request get failed.");
+    Request error = {400, "Bad Request"};
+    return error;
   }
   String responseBody = readBody();
-  Request request = {0, responseBody};
+  Request request = {200, responseBody};
   return request;
 }
 
 String readBody()
 {
-  WiFiClientSecure client;
   String requestBody = "";
   String line = "";
-  while (client.connected())
+  while (requestClient.connected())
   {
 
-    line = client.readStringUntil('\n');
+    line = requestClient.readStringUntil('\n');
     if (line == "\r")
     {
       // Serial.println(line);
@@ -74,9 +79,9 @@ String readBody()
   String last = "";
   bool first = true;
 
-  while (client.available())
+  while (requestClient.available())
   {
-    line = client.readStringUntil('\n');
+    line = requestClient.readStringUntil('\n');
     if (first)
     {
       first = false;
@@ -88,5 +93,6 @@ String readBody()
       last = line;
     }
   }
-  return requestBody;
+  requestBody.replace("\\n0", "");
+  return requestBody; 
 }

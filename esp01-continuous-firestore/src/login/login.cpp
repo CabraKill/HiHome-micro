@@ -4,21 +4,12 @@
 #include "../requestHandler/requestHandler.h"
 #include "getToken.h"
 
-String loginFirestoreWithEmail(String email, String password)
-{
-    WiFiClientSecure client;
-    client.setFingerprint(fingerprint);
-    client.setTimeout(500);
-    
-    Serial.println("Login Firestore");
-    if (!client.connect(loginHost, 443))
-    {
-        Serial.println("Login connection failed.");
-        return "";
-    }
+WiFiClientSecure client;
 
-    Serial.println("Connection started...");
-    Request response = postRequest(loginHost, path, "{\"email\":\"" + email + "\",\"password\":\"" + password + "\",\"returnSecureToken\":true}");
+String loginFirestoreWithEmail(String email, String password, String host, String path,const char *key)
+{
+    Serial.println("Login Firestore");
+    Request response = postRequest(host, path, "{\"email\":\"" + email + "\",\"password\":\"" + password + "\",\"returnSecureToken\":true}", key);
     if (response.statusCode != 200)
     {
         Serial.println("Connection failed.");

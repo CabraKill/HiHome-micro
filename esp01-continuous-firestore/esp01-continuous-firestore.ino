@@ -6,7 +6,6 @@
 #include "src/requestHandler/requestHandler.h"
 #include "src/login/login.h"
 
-
 WiFiClient wifiClient;
 
 #define RELAY 0
@@ -25,6 +24,11 @@ String ip = "";
 String mac = "60:01:94:21:E7:FA";
 const char *host = "home-dbb7e.rj.r.appspot.com";
 
+const String loginHost = "identitytoolkit.googleapis.com";
+const String path = "/v1/accounts:signInWithPassword?key=AIzaSyAIdWnqjoG0uo3Z2CYYpB0IHig1CqtLpKA";
+
+//SHA-1 Fingerprint
+const char fingerprint[] PROGMEM = "68 DB 23 67 82 7A 3D 3A 3D 68 E1 7B DD 8E 49 36 FB 46 8B B8";
 
 const int delayBetweenReads = 5000;
 
@@ -35,6 +39,8 @@ String token = "";
 int statusCode = -1;
 
 bool done = false;
+
+WiFiClientSecure httpsClient;
 
 void checkWifi()
 {
@@ -47,18 +53,13 @@ void checkWifi()
   Serial.println("WiFi connected");
 }
 
-
-
 void setup()
 {
   pinMode(RELAY, OUTPUT);
   digitalWrite(RELAY, LOW);
   Serial.begin(115200); // must be same baudrate with the Serial Monitor
-
-  WiFiClientSecure httpsClient;
   httpsClient.setFingerprint(fingerprint);
   httpsClient.setTimeout(500);
-
 
   Serial.print("\n\n");
   Serial.print("Connecting to ");
@@ -82,7 +83,7 @@ void loop()
 {
   if (!done)
   {
-    loginFirestoreWithEmail(email, emailPassword);
+    loginFirestoreWithEmail(email, emailPassword, loginHost, path, fingerprint);
     done = true;
   }
   Serial.println(".");
