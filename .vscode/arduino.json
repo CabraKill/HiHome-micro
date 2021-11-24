@@ -3,5 +3,6 @@
     "board": "esp8266:esp8266:nodemcuv2",
     "port": "COM5",
     "programmer": "arduino:avrisp",
-    "sketch": "esp01-continuous-firestore\\esp01-continuous-firestore.ino"
+    "sketch": "esp01-continuous-firestore\\esp01-continuous-firestore.ino",
+    "output": "../build"
 }
