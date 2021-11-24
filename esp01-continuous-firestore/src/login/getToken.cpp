@@ -1,3 +1,3 @@
 #include <Arduino.h>
 
-const char* getToken(String json);
+String getToken(String json);
