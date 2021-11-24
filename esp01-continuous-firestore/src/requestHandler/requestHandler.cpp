@@ -62,7 +62,6 @@ String readBody()
   String line = "";
   while (requestClient.connected())
   {
-
     line = requestClient.readStringUntil('\n');
     if (line == "\r")
     {
@@ -77,6 +76,7 @@ String readBody()
   }
 
   String last = "";
+  String penultimate = "";
   bool first = true;
 
   while (requestClient.available())
@@ -89,10 +89,10 @@ String readBody()
     else
     {
       // Serial.println(last + "|");
-      requestBody = requestBody + last;
+      requestBody = requestBody + penultimate;
+      penultimate = last;
       last = line;
     }
   }
-  requestBody.replace("\\n0", "");
-  return requestBody; 
+  return requestBody;
 }

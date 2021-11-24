@@ -3,7 +3,7 @@
 typedef struct
 {
     int statusCode;
-    String body;
+    const String body;
 } Request;
 
 Request postRequest(String url, String path, String body, const char *fingerprint);
