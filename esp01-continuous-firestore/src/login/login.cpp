@@ -17,8 +17,6 @@ String loginFirestoreWithEmail(String email, String password, String host, Strin
     }
 
     Serial.println("Login success.");
-    Serial.println("Body: " + response.body);
     const String token = getToken(response.body.c_str());
-    Serial.println("Token: " + token);
     return token;
 }
