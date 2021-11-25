@@ -74,7 +74,6 @@ void loop()
   while (httpsClient.connected()) {
     String line = httpsClient.readStringUntil('\n');
     if (line == "\r") {
-      Serial.println("headers received");
       break;
     }
   }

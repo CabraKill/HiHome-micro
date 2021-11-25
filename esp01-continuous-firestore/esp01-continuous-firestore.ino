@@ -5,6 +5,7 @@
 #include <ESP8266HTTPClient.h>
 #include "src/requestHandler/requestHandler.h"
 #include "src/login/login.h"
+#include "src/read_data/read_data.h"
 
 WiFiClient wifiClient;
 
@@ -29,6 +30,8 @@ const String path = "/v1/accounts:signInWithPassword?key=AIzaSyAIdWnqjoG0uo3Z2CY
 
 //SHA-1 Fingerprint
 const char fingerprint[] PROGMEM = "68 DB 23 67 82 7A 3D 3A 3D 68 E1 7B DD 8E 49 36 FB 46 8B B8";
+const char fingerprintFirestore[] PROGMEM = "46 65 29 45 00 73 43 B9 68 B2 B9 47 9D 4B FD 21 19 C8 EF CF";
+
 
 const int delayBetweenReads = 5000;
 
@@ -79,13 +82,19 @@ void setup()
   Serial.println(ip);
 }
 
+String currentToken = "";
 void loop()
 {
-  if (!done)
+  if (done)
   {
-    loginFirestoreWithEmail(email, emailPassword, loginHost, path, fingerprint);
-    done = true;
+    return;
   }
+  if (currentToken == "")
+    currentToken = loginFirestoreWithEmail(email, emailPassword, loginHost, path, fingerprint);
+  if (currentToken == "")
+    return;
+  const String state = readFromFirestore("firestore.googleapis.com","/v1/projects/home-dbb7e/databases/(default)/documents/unities/rft43A10RZ4LOmMQ6gry/sections/Y2OksEM7ErCqr2jx8UQJ/devices/xC8UGLSYT8z2pxwKaAeY", currentToken, fingerprintFirestore);
+  Serial.println("state: " + state);
   Serial.println(".");
 
   delay(delayBetweenReads);

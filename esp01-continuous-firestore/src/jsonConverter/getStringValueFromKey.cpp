@@ -1,19 +1,18 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
+#include "getStringValueFromKey.h"
 
-String getStringValueFromKey(String key, const char* json)
+String getStringValueFromKey(String key, const char* text)
 {
-
     DynamicJsonDocument doc(2048);
-    // Deserialize the JSON document
-    DeserializationError error = deserializeJson(doc, json);
-    // Test if parsing succeeds.
+    DeserializationError error = deserializeJson(doc, text);
     if (error)
     {
         Serial.print(F("deserializeJson() failed: "));
         Serial.println(error.f_str());
         return "";
     }
-    const char* value = doc[key];
+
+    String value = doc[key];
     return value;
 }

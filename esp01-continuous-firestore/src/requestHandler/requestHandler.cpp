@@ -3,7 +3,7 @@
 #include "requestHandler.h"
 
 WiFiClientSecure requestClient;
-bool makeRequest(String url, String path, String body, String requesType, int port, const char *fingerprint)
+bool makeRequest(String url, String path, String body, const String headers, String requesType, int port, const char *fingerprint)
 {
   requestClient.setFingerprint(fingerprint);
   requestClient.setTimeout(500);
@@ -17,7 +17,7 @@ bool makeRequest(String url, String path, String body, String requesType, int po
   Serial.println("Sending " + requesType);
   requestClient.print(String(requesType + " ") + path + " HTTP/1.1\r\n" +
                       "Host: " + url + "\r\n" +
-                      "Content-Type: application/json" +
+                      "Content-Type: application/json" + headers +
                       "Connection: close\n" +
                       "Content-Length: " + body.length() +
                       "\n\n" +
@@ -30,7 +30,7 @@ bool makeRequest(String url, String path, String body, String requesType, int po
 
 Request postRequest(String url, String path, String body, const char *fingerprint)
 {
-  bool result = makeRequest(url, path, body, "POST", 443, fingerprint);
+  bool result = makeRequest(url, path, body, "", "POST", 443, fingerprint);
   if (!result)
   {
     Serial.println("Request post failed.");
@@ -42,9 +42,9 @@ Request postRequest(String url, String path, String body, const char *fingerprin
   return request;
 }
 
-Request getRequest(String url, String path, String body, const char *fingerprint)
+Request getRequest(String url, String path, const String headers, const char* fingerprint)
 {
-  bool result = makeRequest(url, path, body, "GET", 443, fingerprint);
+  bool result = makeRequest(url, path, "", headers, "GET", 443, fingerprint);
   if (!result)
   {
     Serial.println("Request get failed.");
