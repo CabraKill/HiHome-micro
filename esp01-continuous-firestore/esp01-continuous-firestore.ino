@@ -6,6 +6,7 @@
 #include "src/requestHandler/requestHandler.h"
 #include "src/login/login.h"
 #include "src/read_data/read_data.h"
+#include "src/calcFlightTime/calcFligthTime.h"
 
 WiFiClient wifiClient;
 
@@ -84,6 +85,7 @@ void setup()
 String currentToken = "";
 void loop()
 {
+  unsigned long now = millis();
   if (currentToken == "")
     currentToken = loginFirestoreWithEmail(email, emailPassword, loginHost, path, fingerprint);
   if (currentToken == "")
@@ -102,5 +104,9 @@ void loop()
   Serial.println("value: " + value);
 
 
-  delay(delayBetweenReads);
+  unsigned long flight = getFlightTime(now);
+  if(flight > delayBetweenReads){
+    return;
+  }
+  delay(delayBetweenReads - flight);
 }
