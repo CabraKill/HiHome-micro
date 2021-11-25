@@ -59,7 +59,7 @@ Request getRequest(String url, String path, const String headers, const char* fi
 String readBody()
 {
   String requestBody = "";
-  String line = "";
+  String line;
   while (requestClient.connected())
   {
     line = requestClient.readStringUntil('\n');
