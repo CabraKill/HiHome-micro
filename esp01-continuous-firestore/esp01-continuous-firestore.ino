@@ -32,7 +32,7 @@ const String path = "/v1/accounts:signInWithPassword?key=AIzaSyAIdWnqjoG0uo3Z2CY
 const char fingerprint[] PROGMEM = "68 DB 23 67 82 7A 3D 3A 3D 68 E1 7B DD 8E 49 36 FB 46 8B B8";
 const char fingerprintFirestore[] PROGMEM = "46 65 29 45 00 73 43 B9 68 B2 B9 47 9D 4B FD 21 19 C8 EF CF";
 
-const int delayBetweenReads = 300;
+const int delayBetweenReads = 230;
 
 bool ok = false;
 
