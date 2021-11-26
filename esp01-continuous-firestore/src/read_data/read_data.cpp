@@ -4,7 +4,7 @@
 #include "../requestHandler/requestHandler.h"
 #include "../jsonConverter/getStringValueFromKey.h"
 
-String readFromFirestore(const String url, const String path, String token, const char* fingerprint)
+String readFromFirestore(const String url, const String path, String token, const char *fingerprint)
 {
     Request requestValue = getRequest(url, path, ";Authorization: Bearer " + token, fingerprint);
     if (requestValue.statusCode != 200)

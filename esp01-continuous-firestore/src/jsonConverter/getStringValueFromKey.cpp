@@ -2,7 +2,7 @@
 #include <ArduinoJson.h>
 #include "getStringValueFromKey.h"
 
-String getStringValueFromKey(String key, const char* text)
+String getStringValueFromKey(String key, const String text)
 {
     DynamicJsonDocument doc(2048);
     DeserializationError error = deserializeJson(doc, text);

@@ -2,8 +2,8 @@
 #include <ArduinoJson.h>
 #include "../jsonConverter/getStringValueFromKey.h"
 
-String getToken(const char* json)
+String getToken(const String json)
 {
-    String token = getStringValueFromKey("idToken", json) ;
+    String token = getStringValueFromKey("idToken", json);
     return token;
 }

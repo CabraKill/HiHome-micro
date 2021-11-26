@@ -1,3 +1,3 @@
 #include <Arduino.h>
 
-String getStringValueFromKey(String key, const char* json);
+String getStringValueFromKey(String key, const String json);
