@@ -28,7 +28,7 @@ const String loginHost = "identitytoolkit.googleapis.com";
 const String path = "/v1/accounts:signInWithPassword?key=AIzaSyAIdWnqjoG0uo3Z2CYYpB0IHig1CqtLpKA";
 
 //SHA-1 Fingerprint
-const char fingerprint[] PROGMEM = "68 DB 23 67 82 7A 3D 3A 3D 68 E1 7B DD 8E 49 36 FB 46 8B B8";
+const char fingerprintIdentityToolKit[] PROGMEM = "68 DB 23 67 82 7A 3D 3A 3D 68 E1 7B DD 8E 49 36 FB 46 8B B8";
 const char fingerprintFirestore[] PROGMEM = "46 65 29 45 00 73 43 B9 68 B2 B9 47 9D 4B FD 21 19 C8 EF CF";
 
 const int delayBetweenReads = 230;
@@ -59,7 +59,7 @@ void setup()
   pinMode(RELAY, OUTPUT);
   digitalWrite(RELAY, LOW);
   Serial.begin(115200); // must be same baudrate with the Serial Monitor
-  httpsClient.setFingerprint(fingerprint);
+  httpsClient.setFingerprint(fingerprintIdentityToolKit);
   httpsClient.setTimeout(500);
 
   Serial.print("\n\n");
@@ -85,7 +85,7 @@ void loop()
 {
   unsigned long now = millis();
   if (currentToken == "")
-    currentToken = loginFirestoreWithEmail(emailFirebase, passwordFirebase, loginHost, path, fingerprint);
+    currentToken = loginFirestoreWithEmail(emailFirebase, passwordFirebase, loginHost, path, fingerprintIdentityToolKit);
   if (currentToken == "")
     return;
   const String value = readFromFirestore("firestore.googleapis.com", "/v1/projects/home-dbb7e/databases/(default)/documents/unities/rft43A10RZ4LOmMQ6gry/sections/Y2OksEM7ErCqr2jx8UQJ/devices/xC8UGLSYT8z2pxwKaAeY", currentToken, fingerprintFirestore);
