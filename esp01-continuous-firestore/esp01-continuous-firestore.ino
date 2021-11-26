@@ -7,6 +7,7 @@
 #include "src/login/login.h"
 #include "src/read_data/read_data.h"
 #include "src/calcFlightTime/calcFligthTime.h"
+#include "src/credentials/credentials.h"
 
 WiFiClient wifiClient;
 
@@ -16,9 +17,6 @@ const char *ssid = "Ric Net";
 const char *password = "jrspcmcs03";
 //const char *ssid = "BRONQUINHA";
 //const char *password = "jrspcmcs03";
-
-const String email = "raphaeldesouza@outlook.com";
-const String emailPassword = "123456";
 
 const int port = 443;
 
@@ -87,7 +85,7 @@ void loop()
 {
   unsigned long now = millis();
   if (currentToken == "")
-    currentToken = loginFirestoreWithEmail(email, emailPassword, loginHost, path, fingerprint);
+    currentToken = loginFirestoreWithEmail(emailFirebase, passwordFirebase, loginHost, path, fingerprint);
   if (currentToken == "")
     return;
   const String value = readFromFirestore("firestore.googleapis.com", "/v1/projects/home-dbb7e/databases/(default)/documents/unities/rft43A10RZ4LOmMQ6gry/sections/Y2OksEM7ErCqr2jx8UQJ/devices/xC8UGLSYT8z2pxwKaAeY", currentToken, fingerprintFirestore);
