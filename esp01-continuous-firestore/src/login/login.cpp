@@ -6,10 +6,11 @@
 
 WiFiClientSecure client;
 
-String loginFirestoreWithEmail(String email, String password, String host, String path,const char *key)
+String loginFirestoreWithEmail(String email, String password, String host, String path, const char *fingerprint)
 {
     Serial.println("Login Firestore");
-    Request response = postRequest(host, path, "{\"email\":\"" + email + "\",\"password\":\"" + password + "\",\"returnSecureToken\":true}", key);
+    const String body = "{\"email\":\"" + email + "\",\"password\":\"" + password + "\",\"returnSecureToken\":true}";
+    Request response = postRequest(host, path, body, "", fingerprint);
     if (response.statusCode != 200)
     {
         Serial.println("Connection failed.");

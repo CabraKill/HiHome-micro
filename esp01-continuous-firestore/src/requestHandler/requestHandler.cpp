@@ -28,9 +28,9 @@ bool makeRequest(String url, String path, String body, const String headers, Str
   return true;
 }
 
-Request postRequest(String url, String path, String body, const char *fingerprint)
+Request postRequest(String url, String path, String body, const String headers, const char *fingerprint)
 {
-  bool result = makeRequest(url, path, body, "", "POST", 443, fingerprint);
+  bool result = makeRequest(url, path, body, headers, "POST", 443, fingerprint);
   if (!result)
   {
     Serial.println("Request post failed.");
@@ -42,7 +42,7 @@ Request postRequest(String url, String path, String body, const char *fingerprin
   return request;
 }
 
-Request getRequest(String url, String path, const String headers, const char* fingerprint)
+Request getRequest(String url, String path, const String headers, const char *fingerprint)
 {
   bool result = makeRequest(url, path, "", headers, "GET", 443, fingerprint);
   if (!result)
