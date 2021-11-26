@@ -1,3 +1,9 @@
-const char* emailFirebase = "something@email.com";
+#include <Arduino.h>
 
-const char* passwordFirebase = "123";
+const String wifiSSID = "WifiName";
+
+const String wifiPassword = "123";
+
+const String emailFirebase = "test@hihome.com";
+
+const String passwordFirebase = "7654321";
